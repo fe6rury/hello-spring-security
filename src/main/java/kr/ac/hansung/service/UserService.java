@@ -1,5 +1,6 @@
 package kr.ac.hansung.service;
 
+import kr.ac.hansung.dto.UserDto;
 import kr.ac.hansung.entity.User;
 import kr.ac.hansung.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,20 @@ public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    // 기존 메서드 - 회원가입
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
+
+    @Transactional
+    public void signup(UserDto dto) {
+        User user = new User();
+        user.setEmail(dto.getEmail());
+        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        userRepository.save(user);
+    }
+
+    // 추가 메서드 - 비밀번호 변경
     @Transactional
     public void changePassword(String email, String currentPassword, String newPassword) {
         User user = userRepository.findByEmail(email)

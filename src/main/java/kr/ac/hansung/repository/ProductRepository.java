@@ -11,6 +11,10 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+    // 기존 메서드
+    long countByStockEquals(int stock);
+
+    // 추가 메서드 - 키워드 검색 + 페이징
     @Query("SELECT p FROM Product p WHERE p.name LIKE %:keyword%")
     Page<Product> findByNameContaining(@Param("keyword") String keyword,
                                        Pageable pageable);
